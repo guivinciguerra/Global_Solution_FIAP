@@ -1,5 +1,23 @@
 import plotly.express as px
+import pandas as pd
+import plotly.express as px
 
+def grafico_historico():
+
+    df = pd.read_csv(
+        "data/historico_chuvas.csv"
+    )
+
+    fig = px.line(
+        df,
+        x="dia",
+        y="chuva",
+        color="cidade",
+        markers=True,
+        title="Histórico de Chuvas"
+    )
+
+    return fig
 
 def grafico_chuva(df):
 

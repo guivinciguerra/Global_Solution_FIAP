@@ -5,7 +5,8 @@ from src.services.analisador import analisar_cidades
 
 from src.utils.graficos import (
     grafico_chuva,
-    grafico_rio
+    grafico_rio,
+    grafico_historico
 )
 
 
@@ -24,5 +25,10 @@ def render():
 
     st.plotly_chart(
         grafico_rio(df),
+        use_container_width=True
+    )
+
+    st.plotly_chart(
+        grafico_historico(),
         use_container_width=True
     )

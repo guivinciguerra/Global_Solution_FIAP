@@ -5,7 +5,9 @@ from dashboard.pages import (
     home,
     monitoramento,
     alertas,
-    relatorios
+    relatorios,
+    mapa_risco,
+    ia_assistente
 )
 
 st.set_page_config(
@@ -18,10 +20,12 @@ render_sidebar()
 pagina = st.sidebar.radio(
     "Navegação",
     [
+        "Mapa de Risco",
         "Dashboard",
         "Monitoramento",
         "Alertas",
-        "Relatórios"
+        "Relatórios",
+        "IA Assistente"
     ]
 )
 
@@ -30,6 +34,12 @@ if pagina == "Dashboard":
 
 elif pagina == "Monitoramento":
     monitoramento.render()
+
+elif pagina == "Mapa de Risco":
+    mapa_risco.render()
+
+elif pagina == "IA Assistente":
+    ia_assistente.render()
 
 elif pagina == "Alertas":
     alertas.render()
