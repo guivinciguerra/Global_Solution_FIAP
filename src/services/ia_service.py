@@ -1,30 +1,45 @@
+from src.utils.loaders import (
+    carregar_simulacao
+)
+
+from src.services.analisador import (
+    analisar_cidades
+)
+
+
 def responder(pergunta):
+
+    df = carregar_simulacao()
+
+    df = analisar_cidades(df)
 
     pergunta = pergunta.lower()
 
-    if "risco" in pergunta:
+    if "maior risco" in pergunta:
+
+        cidade = df.sort_values(
+            "nivel_rio",
+            ascending=False
+        ).iloc[0]
 
         return (
-            "A região monitorada "
-            "apresenta risco elevado "
-            "de enchentes."
+            f"{cidade['cidade']} "
+            f"possui o maior risco "
+            f"atualmente."
         )
 
-    elif "chuva" in pergunta:
+    if "crítico" in pergunta:
+
+        cidades = df[
+            df["risco"] == "CRÍTICO"
+        ]
 
         return (
-            "O volume de chuva "
-            "está acima da média."
-        )
-
-    elif "cidade" in pergunta:
-
-        return (
-            "São Paulo possui "
-            "o maior nível de risco."
+            f"Existem {len(cidades)} "
+            f"cidades em risco crítico."
         )
 
     return (
-        "Não encontrei uma resposta "
-        "para essa pergunta."
+        "Tente perguntar sobre "
+        "risco ou enchentes."
     )

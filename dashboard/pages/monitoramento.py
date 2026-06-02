@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 from src.utils.loaders import carregar_simulacao
 from src.services.analisador import analisar_cidades
@@ -16,3 +17,8 @@ def render():
         df,
         use_container_width=True
     )
+
+    if st.button(
+            "Atualizar Dados"
+    ):
+        st.rerun()

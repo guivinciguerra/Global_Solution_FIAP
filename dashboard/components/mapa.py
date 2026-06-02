@@ -1,52 +1,66 @@
+import pandas as pd
 import folium
+
 from streamlit_folium import st_folium
+
+from src.utils.loaders import carregar_simulacao
+from src.services.analisador import analisar_cidades
+
+
+def cor_risco(risco):
+
+    cores = {
+        "BAIXO": "green",
+        "MÉDIO": "orange",
+        "ALTO": "red",
+        "CRÍTICO": "darkred"
+    }
+
+    return cores.get(
+        risco,
+        "blue"
+    )
 
 
 def criar_mapa():
+
+    simulacao = carregar_simulacao()
+
+    simulacao = analisar_cidades(
+        simulacao
+    )
+
+    coordenadas = pd.read_csv(
+        "data/coordenadas.csv"
+    )
+
+    df = simulacao.merge(
+        coordenadas,
+        on="cidade"
+    )
 
     mapa = folium.Map(
         location=[-23.55, -46.63],
         zoom_start=7
     )
 
-    cidades = [
-        {
-            "nome": "São Paulo",
-            "lat": -23.55,
-            "lon": -46.63,
-            "risco": "CRÍTICO"
-        },
-        {
-            "nome": "Campinas",
-            "lat": -22.90,
-            "lon": -47.06,
-            "risco": "MÉDIO"
-        },
-        {
-            "nome": "Santos",
-            "lat": -23.96,
-            "lon": -46.33,
-            "risco": "ALTO"
-        }
-    ]
+    for _, row in df.iterrows():
 
-    for cidade in cidades:
-
-        cor = "green"
-
-        if cidade["risco"] == "MÉDIO":
-            cor = "orange"
-
-        elif cidade["risco"] == "ALTO":
-            cor = "red"
-
-        elif cidade["risco"] == "CRÍTICO":
-            cor = "darkred"
+        popup = f"""
+        <b>{row['cidade']}</b><br>
+        Chuva: {row['chuva']} mm<br>
+        Rio: {row['nivel_rio']}%<br>
+        Risco: {row['risco']}
+        """
 
         folium.Marker(
-            [cidade["lat"], cidade["lon"]],
-            popup=f"{cidade['nome']} - {cidade['risco']}",
-            icon=folium.Icon(color=cor)
+            [row['latitude'], row['longitude']],
+            popup=popup,
+            icon=folium.Icon(
+                color=cor_risco(
+                    row['risco']
+                )
+            )
         ).add_to(mapa)
 
     return mapa

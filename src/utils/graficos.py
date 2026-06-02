@@ -1,6 +1,22 @@
-import plotly.express as px
 import pandas as pd
 import plotly.express as px
+
+def grafico_previsao(previsoes):
+
+    df = pd.DataFrame(
+        previsoes
+    )
+
+    fig = px.line(
+        df,
+        x="hora",
+        y="chuva",
+        markers=True,
+        title="Previsão para as Próximas 24 Horas"
+    )
+
+    return fig
+
 
 def grafico_historico():
 
