@@ -17,6 +17,29 @@ def grafico_previsao(previsoes):
 
     return fig
 
+def grafico_distribuicao_risco(df):
+
+    distribuicao = (
+        df["risco"]
+        .value_counts()
+        .reset_index()
+    )
+
+    distribuicao.columns = [
+        "risco",
+        "quantidade"
+    ]
+
+    fig = px.bar(
+        distribuicao,
+        x="risco",
+        y="quantidade",
+        title="Distribuição dos Níveis de Risco",
+        text="quantidade",
+        color="risco"
+    )
+
+    return fig
 
 def grafico_historico():
 
